@@ -34,11 +34,11 @@ namespace PIEAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<Category> Create(string name)
+        public async Task<Category> Create(CategoryCreateModel model)
         {
             var newCategory = new Category
             {
-                Name = name
+                Name = model.Name
             };
 
             using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))

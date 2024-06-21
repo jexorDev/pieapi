@@ -9,15 +9,30 @@ namespace PIEAPI.DataLayer.Repositories
         {
             const string Sql = @"
 SELECT
- question_id
+ entries.id
+,question_id
+,text
+,categories.id category_id
+,categories.name category_name
 ,timestamp
 ,entered_by
 ,location_id
-FROM entries
+FROM 
+    entries
+INNER JOIN 
+    questions
+ON
+    questions.id = question_id
+INNER JOIN
+    categories
+ON
+    categories.id = questions.category_id
 WHERE 
     entered_by = @entered_by
 AND
     timestamp::date = @timestamp::date
+ORDER BY 
+    timestamp DESC
 ";
             List<Entry> entries = new List<Entry>();
 
@@ -32,7 +47,11 @@ AND
                     {
                         entries.Add(new Entry
                         {
+                            Id = int.Parse(reader["id"].ToString()),
                             QuestionId = int.Parse(reader["question_id"].ToString()),
+                            QuestionText = reader["text"].ToString(),
+                            CategoryId = int.Parse(reader["category_id"].ToString()),
+                            CategoryName = reader["category_name"].ToString(),
                             Timestamp = DateTime.Parse(reader["timestamp"].ToString()),
                             EnteredBy = int.Parse(reader["entered_by"].ToString()),
                             LocationId = short.Parse(reader["location_id"].ToString())
