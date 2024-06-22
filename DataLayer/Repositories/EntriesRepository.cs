@@ -77,7 +77,7 @@ INSERT INTO entries
 VALUES
 (
  @question_id
-,CURRENT_TIMESTAMP
+,@timestamp
 ,0
 ,@location_id
 ) RETURNING id
@@ -86,6 +86,7 @@ VALUES
             {
                 cmd.Parameters.AddWithValue("question_id", entry.QuestionId);
                 cmd.Parameters.AddWithValue("location_id", entry.LocationId);
+                cmd.Parameters.AddWithValue("timestamp", entry.Timestamp);
 
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }

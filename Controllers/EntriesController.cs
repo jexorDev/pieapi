@@ -21,13 +21,13 @@ namespace PIEAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Entry>> Get()
+        public async Task<List<Entry>> Get(DateTime dateTime)
         {
             using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))
             {
                 conn.Open();
 
-                var entries = _entriesRepository.GetEntries(DateTime.Now, 0, conn);
+                var entries = _entriesRepository.GetEntries(dateTime, 0, conn);
                 entries.ForEach(entry => entry.Timestamp = entry.Timestamp.ToLocalTime());
                 return entries;
 
@@ -43,6 +43,7 @@ namespace PIEAPI.Controllers
                 QuestionId = model.QuestionId,
                 EnteredBy = 0,
                 LocationId = model.LocationId,
+                Timestamp = DateTime.Parse(model.Timestamp),
             };
 
             using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))

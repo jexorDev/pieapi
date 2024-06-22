@@ -35,7 +35,7 @@ OR
                             Id = int.Parse(reader["id"].ToString()),
                             CategoryId = int.Parse(reader["category_id"].ToString()),
                             Text = reader["text"].ToString(),
-                            CreatedBy = int.Parse(reader["created_by"].ToString())
+                            CreatedBy = reader["created_by"] == DBNull.Value ? null : int.Parse(reader["created_by"].ToString())
                         });
                     }
 

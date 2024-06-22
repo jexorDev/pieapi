@@ -4,5 +4,6 @@
     {
         public int QuestionId { get; set; }
         public short LocationId { get; set; }
+        public string Timestamp { get; set; }
     }
 }
