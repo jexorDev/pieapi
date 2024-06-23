@@ -27,9 +27,7 @@ namespace PIEAPI.Controllers
             {
                 conn.Open();
 
-                var entries = _entriesRepository.GetEntries(dateTime, 0, conn);
-                entries.ForEach(entry => entry.Timestamp = entry.Timestamp.ToLocalTime());
-                return entries;
+                return _entriesRepository.GetEntries(dateTime, 0, conn);
 
                 conn.Close();
             }
