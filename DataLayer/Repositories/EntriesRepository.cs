@@ -91,5 +91,39 @@ VALUES
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+
+        public void UpdateEntry(NpgsqlConnection conn, NpgsqlTransaction trans, Entry entry)
+        {
+            const string Sql = @"
+UPDATE entries 
+SET
+    location_id = @location_id
+WHERE
+    id = @id
+";
+            using (var cmd = new NpgsqlCommand(Sql, conn, trans))
+            {
+                cmd.Parameters.AddWithValue("id", entry.Id);
+                cmd.Parameters.AddWithValue("location_id", entry.LocationId);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteEntry(NpgsqlConnection conn, NpgsqlTransaction trans, int entryId)
+        {
+            const string Sql = @"
+DELETE FROM
+    entries 
+WHERE
+    id = @id
+";
+            using (var cmd = new NpgsqlCommand(Sql, conn, trans))
+            {
+                cmd.Parameters.AddWithValue("id", entryId);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

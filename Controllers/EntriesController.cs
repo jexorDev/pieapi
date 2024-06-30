@@ -59,5 +59,41 @@ namespace PIEAPI.Controllers
 
             return newEntry;
         }
+
+        [HttpPut]
+        public async Task Update(EntryUpdateModel model)
+        {
+            var entry = new Entry
+            {
+                Id = model.Id,
+                LocationId = model.LocationId
+            };
+
+            using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))
+            {
+                conn.Open();
+                NpgsqlTransaction transaction = conn.BeginTransaction();
+
+                _entriesRepository.UpdateEntry(conn, transaction, entry);
+                
+                transaction.Commit();
+                conn.Close();
+            }
+        }
+
+        [HttpDelete("{*id}")]
+        public async Task Delete([FromRoute]int id)
+        {
+            using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))
+            {
+                conn.Open();
+                NpgsqlTransaction transaction = conn.BeginTransaction();
+
+                _entriesRepository.DeleteEntry(conn, transaction, id);
+
+                transaction.Commit();
+                conn.Close();
+            }
+        }
     }
 }

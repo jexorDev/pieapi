@@ -19,7 +19,7 @@ namespace PIEAPI.Controllers
             _statisticsRepository = new StatisticsRepository();
         }
 
-        [HttpGet]
+        [HttpGet("question-count")]
         public async Task<List<StatisticQuestionCount>> Get(DateTime dateTime)
         {
             using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))
@@ -27,6 +27,19 @@ namespace PIEAPI.Controllers
                 conn.Open();
 
                 return _statisticsRepository.GetQuestionCount(dateTime, 0, conn).OrderByDescending(x => x.Count).ToList();
+
+                conn.Close();
+            }
+        }
+
+        [HttpGet("question-count-by-location")]
+        public async Task<List<StatisticQuestionCountByLocation>> GetByLocation(DateTime dateTime)
+        {
+            using (var conn = new NpgsqlConnection(DatabaseConnectionStringBuilder.GetSqlConnectionString(_configuration)))
+            {
+                conn.Open();
+
+                return _statisticsRepository.GetQuestionCountGroupedByLocation(dateTime, 0, conn).OrderByDescending(x => x.Count).ToList();
 
                 conn.Close();
             }

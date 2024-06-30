@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
 
         if (!string.IsNullOrWhiteSpace(prodSiteUrl))
         {
-            policy.WithOrigins(prodSiteUrl).WithMethods("GET", "POST", "OPTIONS").WithHeaders("*");
+            policy.WithOrigins(prodSiteUrl).WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").WithHeaders("*");
         }        
     });
 });
